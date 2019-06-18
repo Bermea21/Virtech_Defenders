@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -6046023703753935181}
   - component: {fileID: -5142669991945914836}
   - component: {fileID: 5820923091289667152}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Heladito_prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -131,3 +131,5 @@ MonoBehaviour:
   - {fileID: 4629517577941873549, guid: 4bcdfa74ebef4cd4a9ceb05ddd736941, type: 3}
   - {fileID: 5324878983045305005, guid: 3e5aaaaa9e7adb142b1e931e9d48abcd, type: 3}
   - {fileID: 2887393447330088314, guid: 45d429d2722a89b48a4afae5aa6912cb, type: 3}
+  "Da\xF1o_prefab": {fileID: 5339152654144890818, guid: 25439f8cc73063b4290383c125e78bef,
+    type: 3}

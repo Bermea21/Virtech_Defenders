@@ -13,6 +13,7 @@ public class iram_scrpt : MonoBehaviour
     Stats Stats;
     public bool ulti;
     int LYRMSK = 1 << 9;
+    bool atacando = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,6 +27,7 @@ public class iram_scrpt : MonoBehaviour
         if (Physics.Raycast(transform.position, Vector3.right * dir, out RH, 5, LYRMSK))
         {
             if (RH.collider.tag == "Malo")
+            {
                 if (ulti == false)
                 {
                     atk();
@@ -34,8 +36,14 @@ public class iram_scrpt : MonoBehaviour
                 {
                     ultimate_atk();
                 }
+                atacando = true;
+            }
+            else
+            {
+                atacando = false;
+            }
         }
-        else if(ulti == false)
+        else if(atacando == false)
         {
             wlk();
         }
@@ -53,6 +61,10 @@ public class iram_scrpt : MonoBehaviour
     {
         Animator.SetInteger("estado", 1);
     }
+    public void atk_return()
+    {
+        atacando = false;
+    }
     void ultimate_atk()
     {
         Animator.SetInteger("estado", 3);
@@ -62,6 +74,8 @@ public class iram_scrpt : MonoBehaviour
         Animator.SetInteger("estado", 0);
         Stats.Power = 0;
         ulti = false;
+        atacando = false;
+        Stats.ADD_Power(0);
     }
     public void proyectil()
     {
