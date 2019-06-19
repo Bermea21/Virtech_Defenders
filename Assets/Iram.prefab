@@ -114,7 +114,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Power: 0
-  Vida: 100
+  Vida: 0
+  lvl_vida: 0
+  lvl_atq: 0
+  lvl_spd: 0
+  atq:
+  - 6
+  - 9
+  - 12
+  vida_inicial:
+  - 100
+  - 125
+  - 150
+  velocidad:
+  - 1.2
+  - 1.5
+  - 1.8
   Power_Rect: {fileID: 891372299}
   Vida_Rect: {fileID: 1304997272}
 --- !u!1 &891372298
@@ -431,7 +446,7 @@ GameObject:
   - component: {fileID: 5924143908693746619}
   m_Layer: 8
   m_Name: Iram
-  m_TagString: Untagged
+  m_TagString: Iram
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

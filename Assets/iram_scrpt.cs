@@ -14,14 +14,11 @@ public class iram_scrpt : MonoBehaviour
     public bool ulti;
     int LYRMSK = 1 << 9;
     bool atacando = false;
-    // Start is called before the first frame update
     void Start()
     {
         Animator = GetComponent<Animator>();
         Stats = GetComponentInChildren<Stats>();
     }
-
-    // Update is called once per frame
     void Update()
     {
         if (Physics.Raycast(transform.position, Vector3.right * dir, out RH, 5, LYRMSK))
@@ -82,7 +79,10 @@ public class iram_scrpt : MonoBehaviour
         GameObject GO = Instantiate(Heladito_prefab,transform.position + new Vector3(dir*0.2f,-0.2f,0),Quaternion.identity);
         int sabor = Random.Range(0, 4);
         GO.GetComponent<SpriteRenderer>().sprite = sprites[sabor];
-        GO.GetComponent<Heladito_scrpt>().Sabor = sabor;
+        Heladito_scrpt heladito_Scrpt = GO.GetComponent<Heladito_scrpt>();
+        heladito_Scrpt.Sabor = sabor;
+        heladito_Scrpt.creador = Stats;
+        heladito_Scrpt.team = gameObject.layer.ToString();
         GO.GetComponent<Rigidbody>().AddForce(new Vector3( 4*dir,2,0),ForceMode.Impulse);
         Stats.ADD_Power(8);
     }

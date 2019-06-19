@@ -83,16 +83,10 @@ public class Ivancho_scrpt : MonoBehaviour
     }
     public void slash()
     {
-        /*if (Physics.Raycast(transform.position, Vector3.right * dir, out RH, 0.2f, LYRMSK))
-        {
-            if (RH.collider.tag == "Malo")
-                RH.collider.GetComponent<Rigidbody>().AddForce(new Vector3(2,2,0),ForceMode.Impulse);
-                Stats.ADD_Power(14);
-        }*/
         Collider[] collis = Physics.OverlapBox(transform.position + new Vector3(dir * 0.15f, 0, 0), new Vector3(0.1f, 0.2f, 0), Quaternion.identity);
         foreach (Collider collider in collis)
         {
-            daño = Random.Range(7,15);
+            daño =  Mathf.RoundToInt(Random.Range(Stats.atq[Stats.lvl_atq]-3, Stats.atq[Stats.lvl_atq] + 4));
             if (collider.tag == "Malo")
                 collider.GetComponent<Rigidbody>().AddForce(new Vector3(2, 1, 0), ForceMode.Impulse);
                 Stats.ADD_Power(7);
@@ -102,19 +96,12 @@ public class Ivancho_scrpt : MonoBehaviour
     }
     public void slash_ulti()
     {
-        /* if (Physics.Raycast(transform.position, Vector3.right * dir, out RH, 0.2f, LYRMSK))
-         {
-             if (RH.collider.tag == "Malo")
-                 RH.collider.GetComponent<Rigidbody>().AddForce(new Vector3(2, 2, 0), ForceMode.Impulse);
-             Stats.ADD_Power(14);
-         }
-         transform.Translate(new Vector3(dir * 0.15f, 0, 0), Space.World);*/
         Collider[] collis = Physics.OverlapBox(transform.position + new Vector3(dir * 0.07f, 0, 0), new Vector3(0.1f, 0.2f, 0), Quaternion.identity);
         foreach (Collider collider in collis)
         {
-            daño = Random.Range(7, 15);
+            daño = Mathf.RoundToInt(Random.Range(Stats.atq[Stats.lvl_atq] - 2, Stats.atq[Stats.lvl_atq] + 6));
             if (collider.tag == "Malo")
-                collider.GetComponent<Rigidbody>().AddForce(new Vector3(2, 1, 0), ForceMode.Impulse);
+                collider.GetComponent<Rigidbody>().AddForce(new Vector3(3, 2, 0), ForceMode.Impulse);
             Stats.ADD_Power(7);
             GameObject GO = Instantiate(Daño_prefab, collider.transform.position + new Vector3(Random.Range(-0.55f, 0.55f), Random.Range(-0.23f, 0.23f), 0), Quaternion.identity);
             GO.GetComponentInChildren<Text>().text = daño.ToString();

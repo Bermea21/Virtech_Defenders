@@ -126,6 +126,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Sabor: 0
+  "da\xF1o_creador":
+  - 0
+  - 0
   Explo:
   - {fileID: 5262628131068430652, guid: d08708ddd4bf35e4fac83715f3b2a84c, type: 3}
   - {fileID: 4629517577941873549, guid: 4bcdfa74ebef4cd4a9ceb05ddd736941, type: 3}
@@ -133,3 +136,4 @@ MonoBehaviour:
   - {fileID: 2887393447330088314, guid: 45d429d2722a89b48a4afae5aa6912cb, type: 3}
   "Da\xF1o_prefab": {fileID: 5339152654144890818, guid: 25439f8cc73063b4290383c125e78bef,
     type: 3}
+  creador: {fileID: 0}
