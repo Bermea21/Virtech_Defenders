@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\dest.cs" />
+    <Compile Include="Assets\Dummy_mov.cs" />
     <Compile Include="Assets\Heladito_scrpt.cs" />
     <Compile Include="Assets\iram_scrpt.cs" />
     <Compile Include="Assets\Ivancho_scrpt.cs" />

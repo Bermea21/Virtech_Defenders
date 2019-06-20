@@ -14,49 +14,66 @@ public class iram_scrpt : MonoBehaviour
     public bool ulti;
     int LYRMSK = 1 << 9;
     bool atacando = false;
+    string equipo_malo;
     void Start()
     {
         Animator = GetComponent<Animator>();
         Stats = GetComponentInChildren<Stats>();
+        if(Stats.Equipo == "A")
+        {
+            equipo_malo = "B";
+        }
+        else if(Stats.Equipo == "B")
+        {
+            equipo_malo = "A";
+        }
     }
     void Update()
     {
-        if (Physics.Raycast(transform.position, Vector3.right * dir, out RH, 5, LYRMSK))
+        if (Physics.Raycast(transform.position, Vector3.right * dir, out RH, 8,LYRMSK))
         {
-            if (RH.collider.tag == "Malo")
+            if (RH.collider.gameObject.GetComponentInChildren<Stats>() != null)
             {
-                if (ulti == false)
+                Stats stats_malo = RH.collider.GetComponentInChildren<Stats>();
+                if (stats_malo.Equipo == equipo_malo)
                 {
-                    atk();
+                    if (ulti == false)
+                    {
+                        atk();
+                    }
+                    else
+                    {
+                        ultimate_atk();
+                    }
+                    atacando = true;
                 }
-                else
+                else if (atacando == false)
                 {
-                    ultimate_atk();
+                    wlk();
                 }
-                atacando = true;
-            }
-            else
-            {
-                atacando = false;
             }
         }
-        else if(atacando == false)
+        else if (atacando == false)
         {
             wlk();
         }
-        if(Stats.Power >= 100)
+        if (Stats.Power >= 100)
         {
             ulti = true;
+            Stats.Power = 100;
         }
+        No_coll();
     }
     void wlk()
     {
         Animator.SetInteger("estado", 0);
-        transform.Translate(new Vector3( dir * Time.deltaTime * 1.5f,0,0),Space.World);
+        Animator.speed = 1;
+        transform.Translate(new Vector3( dir * Time.deltaTime * Stats.velocidad[Stats.lvl_spd],0,0),Space.World);
     }
     void atk()
     {
         Animator.SetInteger("estado", 1);
+        Animator.speed = Stats.Atq_speed[Stats.lvl_atq_spd];
     }
     public void atk_return()
     {
@@ -65,6 +82,7 @@ public class iram_scrpt : MonoBehaviour
     void ultimate_atk()
     {
         Animator.SetInteger("estado", 3);
+        Animator.speed = Stats.Atq_speed[Stats.lvl_atq_spd];
     }
     void ultimate_return()
     {
@@ -82,8 +100,23 @@ public class iram_scrpt : MonoBehaviour
         Heladito_scrpt heladito_Scrpt = GO.GetComponent<Heladito_scrpt>();
         heladito_Scrpt.Sabor = sabor;
         heladito_Scrpt.creador = Stats;
-        heladito_Scrpt.team = gameObject.layer.ToString();
-        GO.GetComponent<Rigidbody>().AddForce(new Vector3( 4*dir,2,0),ForceMode.Impulse);
+        GO.GetComponent<Rigidbody>().AddForce(new Vector3( Random.Range(4,6)*dir,Random.Range(2.5f,3),0),ForceMode.Impulse);
         Stats.ADD_Power(8);
     }
+    void No_coll()
+    {
+        Collider[] colli = Physics.OverlapBox(transform.position, new Vector3(0.3f, 0.6f, 0.1f));
+        foreach (Collider col in colli)
+        {
+            if(col.gameObject.GetComponentInChildren<Stats>() != null)
+            {
+                Stats stats_amigo = col.gameObject.GetComponentInChildren<Stats>();
+                if(stats_amigo.Equipo == Stats.Equipo)
+                {
+                    Physics.IgnoreCollision(col, GetComponent<Collider>());
+                }
+            }
+        }
+    }
+
 }
