@@ -20,6 +20,8 @@ public class Heladito_scrpt : MonoBehaviour
             GameObject GO = Instantiate(Daño_prefab, collision.transform.position + new Vector3(Random.Range(-0.55f, 0.55f), Random.Range(-0.23f, 0.23f), 0), Quaternion.identity);
             GO.GetComponentInChildren<Text>().text = daño.ToString();
             Destroy(gameObject);
+            Stats stats_malo = collision.GetComponentInChildren<Stats>();
+            stats_malo.ADD_Vida(-daño);
         }
     }
 }

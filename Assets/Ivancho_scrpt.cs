@@ -15,6 +15,7 @@ public class Ivancho_scrpt : MonoBehaviour
     public bool aire_b = false;
     public GameObject Daño_prefab;
     int daño;
+    public Collider[] collis;
     // Start is called before the first frame update
     void Start()
     {
@@ -89,16 +90,22 @@ public class Ivancho_scrpt : MonoBehaviour
                 RH.collider.GetComponent<Rigidbody>().AddForce(new Vector3(2,2,0),ForceMode.Impulse);
                 Stats.ADD_Power(14);
         }*/
-        Collider[] collis = Physics.OverlapBox(transform.position + new Vector3(dir * 0.15f, 0, 0), new Vector3(0.1f, 0.2f, 0), Quaternion.identity);
+        collis = null;
+        collis = Physics.OverlapBox(transform.position + new Vector3(dir * 0.15f, 0, 0), new Vector3(0.2f, 0.3f, 0), Quaternion.identity,LYRMSK);
         foreach (Collider collider in collis)
         {
-            daño = Random.Range(7,15);
+            daño = Mathf.RoundToInt(Random.Range(Stats.Daño[Stats.lvl_atq] - 3, Stats.Daño[Stats.lvl_atq] + 3));
             if (collider.tag == "Malo")
+            {
                 collider.GetComponent<Rigidbody>().AddForce(new Vector3(2, 1, 0), ForceMode.Impulse);
                 Stats.ADD_Power(7);
-            GameObject GO = Instantiate(Daño_prefab, collider.transform.position + new Vector3(Random.Range(-0.55f, 0.55f), Random.Range(-0.23f, 0.23f), 0), Quaternion.identity);
-            GO.GetComponentInChildren<Text>().text = daño.ToString();
+                GameObject GO = Instantiate(Daño_prefab, collider.transform.position + new Vector3(Random.Range(-0.55f, 0.55f), Random.Range(-0.23f, 0.23f), 0), Quaternion.identity);
+                GO.GetComponentInChildren<Text>().text = daño.ToString();
+                Stats stats_malo = collider.GetComponentInChildren<Stats>();
+                stats_malo.ADD_Vida(-daño);
+            }
         }
+        collis = null;
     }
     public void slash_ulti()
     {
@@ -109,17 +116,22 @@ public class Ivancho_scrpt : MonoBehaviour
              Stats.ADD_Power(14);
          }
          transform.Translate(new Vector3(dir * 0.15f, 0, 0), Space.World);*/
-        Collider[] collis = Physics.OverlapBox(transform.position + new Vector3(dir * 0.07f, 0, 0), new Vector3(0.1f, 0.2f, 0), Quaternion.identity);
+        collis = null;
+        collis = Physics.OverlapBox(transform.position + new Vector3(dir * 0.15f, 0, 0), new Vector3(0.4f, 0.3f, 0), Quaternion.identity,LYRMSK);
         foreach (Collider collider in collis)
         {
-            daño = Random.Range(7, 15);
+            daño = Mathf.RoundToInt(Random.Range(Stats.Daño[Stats.lvl_atq] - 1, Stats.Daño[Stats.lvl_atq] + 6));
             if (collider.tag == "Malo")
-                collider.GetComponent<Rigidbody>().AddForce(new Vector3(2, 1, 0), ForceMode.Impulse);
-            Stats.ADD_Power(7);
-            GameObject GO = Instantiate(Daño_prefab, collider.transform.position + new Vector3(Random.Range(-0.55f, 0.55f), Random.Range(-0.23f, 0.23f), 0), Quaternion.identity);
-            GO.GetComponentInChildren<Text>().text = daño.ToString();
+            {
+                collider.GetComponent<Rigidbody>().AddForce(new Vector3(5, 1, 0), ForceMode.Impulse);
+                Stats.ADD_Power(7);
+                GameObject GO = Instantiate(Daño_prefab, collider.transform.position + new Vector3(Random.Range(-0.55f, 0.55f), Random.Range(-0.23f, 0.23f), 0), Quaternion.identity);
+                GO.GetComponentInChildren<Text>().text = daño.ToString();
+                Stats stats_malo = collider.GetComponentInChildren<Stats>();
+                stats_malo.ADD_Vida(-daño);
+            }
         }
-        Debug.Log("ulti");
+        collis = null;
     }
     void aire()
     {
