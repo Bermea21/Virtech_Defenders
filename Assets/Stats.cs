@@ -4,14 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 public class Stats : MonoBehaviour
 {
-    public int lvl_vida, lvl_atq, lvl_spd, lvl_atq_spd, lvl_escudo;
+    public int lvl_vida, lvl_atq, lvl_spd, lvl_atq_spd, lvl_escudo,lvl_empuje;
     public float Vida, Power;
     public int[] atq = { 6, 7, 9, 11, 13 }, vida_inicial = { 100, 120, 150, 170, 200 }, escudo = {3, 5, 8, 9, 12}; //hasta 5 niveles
-    public float[] velocidad = { 1.3f, 1.5f, 1.7f, 1.9f, 2f }, Atq_speed = { 0.9f, 1.1f, 1.3f, 1.4f, 1.5f };
+    public float[] velocidad = { 1.3f, 1.5f, 1.7f, 1.9f, 2f }, Atq_speed = { 0.9f, 1.1f, 1.3f, 1.4f, 1.5f },empuje = {0,1,2,3,4};
     public RectTransform Power_Rect, Vida_Rect;
     public string Equipo;
     Panel_scrpt panel_Scrpt;
     public bool selected;
+    public GameObject Texto_daño_prefab;
     // Start is called before the first frame update
     public float[] salida_de_datos()
     {
@@ -43,7 +44,21 @@ public class Stats : MonoBehaviour
     }
     public void ADD_Vida(int suma)
     {
-        Vida += suma;
+        //Golpe
+        if (suma < 0)
+        {
+            suma += escudo[lvl_escudo];
+            suma = suma > 0 ? 0 : -suma;
+            Vida -= suma;
+            GameObject GO = Instantiate(Texto_daño_prefab, transform.position + new Vector3(Random.Range(-0.3f, 0.3f), Random.Range(-0.23f, 0.23f), 0), Quaternion.identity);
+            Daño_color(GO, suma);
+            GO.GetComponentInChildren<Text>().text = suma.ToString();
+        }
+        //Curacion
+        else
+        {
+            Vida += suma;
+        }
         if (Vida <= vida_inicial[lvl_vida])
         {
             Vida_Rect.anchorMax = new Vector2(Vida / vida_inicial[lvl_vida] - 1, 0.5f);
@@ -60,23 +75,32 @@ public class Stats : MonoBehaviour
         switch (caso)
         {
             case 0:
+                if(lvl_atq < 4)
                 lvl_atq++;
                 break;
             case 1:
+                if(lvl_vida < 4)
                 lvl_vida++;
                 Vida += 20;
                 break;
             case 2:
+                if(lvl_spd < 4)
                 lvl_spd++;
                 break;
             case 3:
+                if(lvl_atq_spd <4)
                 lvl_atq_spd++;
                 break;
             case 4:
                 Vida += 20;
                 break;
             case 5:
+                if(lvl_escudo < 4)
                 lvl_escudo++;
+                break;
+            case 6:
+                if (lvl_empuje < 4)
+                    lvl_empuje++;
                 break;
         }
         select_update();
@@ -87,6 +111,24 @@ public class Stats : MonoBehaviour
         {
             panel_Scrpt.Get_vals();
             panel_Scrpt.Texto_update();
+        }
+    }
+    private void Daño_color(GameObject GO, int daño)
+    {
+        if (daño <= 5)
+        {
+            GO.GetComponentInChildren<Text>().color = Color.white;
+            GO.GetComponentInChildren<Text>().transform.localScale = new Vector3(1f, 1f, 1);
+        }
+        else if (daño < 10)
+        {
+            GO.GetComponentInChildren<Text>().color = Color.yellow;
+            GO.GetComponentInChildren<Text>().transform.localScale = new Vector3(5.5f, 5.5f, 1);
+        }
+        else if (daño >= 10)
+        {
+            GO.GetComponentInChildren<Text>().color = Color.red;
+            GO.GetComponentInChildren<Text>().transform.localScale = new Vector3(10.5f, 10.5f, 1);
         }
     }
 }

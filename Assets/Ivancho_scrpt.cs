@@ -10,9 +10,9 @@ public class Ivancho_scrpt : MonoBehaviour
     RaycastHit RH;
     Stats Stats;
     public bool ulti;
-    int LYRMSK = 1 << 9;
+    int LYRMSK;
     bool atacando = false;
-    public bool aire_b = false;
+    bool aire_b = false;
     public GameObject Daño_prefab;
     int daño;
     string equipo_malo;
@@ -24,15 +24,18 @@ public class Ivancho_scrpt : MonoBehaviour
         if (Stats.Equipo == "A")
         {
             equipo_malo = "B";
+            LYRMSK = 1 << 9;
         }
         else if (Stats.Equipo == "B")
         {
             equipo_malo = "A";
+            LYRMSK = 1 << 8;
         }
+        GetComponent<SpriteRenderer>().flipX = dir == 1 ? false : true;
     }
     void Update()
     {
-        if (Physics.Raycast(transform.position, Vector3.right * dir, out RH, 0.5f, LYRMSK))
+        if (Physics.Raycast(transform.position, new Vector3(dir,0,0), out RH, 0.5f, LYRMSK))
         {
             if (RH.collider.gameObject.GetComponentInChildren<Stats>() != null)
             {
@@ -64,7 +67,7 @@ public class Ivancho_scrpt : MonoBehaviour
             ulti = true;
             Stats.Power = 100;
         }
-        if (!Physics.Raycast(transform.position, Vector3.down, 0.7f))
+        if (!Physics.Raycast(transform.position, Vector3.down, 0.8f) && ulti == false)
         {
             aire_b = true;
             aire();
@@ -104,20 +107,17 @@ public class Ivancho_scrpt : MonoBehaviour
     }
     public void slash()
     {
-        Collider[] collis = Physics.OverlapBox(transform.position + new Vector3(dir * 0.15f, 0, 0), new Vector3(0.1f, 0.2f, 0), Quaternion.identity);
+        Collider[] collis = Physics.OverlapBox(transform.position + new Vector3(dir * 0.2f,0), new Vector3(0.4f, 0.2f, 0), Quaternion.identity);
         foreach (Collider collider in collis)
         {
-            daño = Mathf.RoundToInt(Random.Range(Stats.atq[Stats.lvl_atq] - 3, Stats.atq[Stats.lvl_atq] + 4));
+            daño = Mathf.RoundToInt(Random.Range(Stats.atq[Stats.lvl_atq] - 1, Stats.atq[Stats.lvl_atq] + 1));
             if (collider.gameObject.GetComponentInChildren<Stats>() != null)
             {
                 Stats malo_stats = collider.GetComponentInChildren<Stats>();
                 if (malo_stats.Equipo != Stats.Equipo)
                 {
-                    collider.GetComponent<Rigidbody>().AddForce(new Vector3(2, 1, 0), ForceMode.Impulse);
+                    collider.GetComponent<Rigidbody>().AddForce(new Vector3(Stats.empuje[Stats.lvl_empuje]*dir, Stats.empuje[Stats.lvl_empuje], 0), ForceMode.Impulse);
                     Stats.ADD_Power(7);
-                    GameObject GO = Instantiate(Daño_prefab, collider.transform.position + new Vector3(Random.Range(-0.55f, 0.55f), Random.Range(-0.23f, 0.23f), 0), Quaternion.identity);
-                    Daño_color(GO,daño);
-                    GO.GetComponentInChildren<Text>().text = daño.ToString();
                     malo_stats.ADD_Vida(-daño);
                     Stats.select_update();
                 }
@@ -129,15 +129,13 @@ public class Ivancho_scrpt : MonoBehaviour
         Collider[] collis = Physics.OverlapBox(transform.position + new Vector3(dir * 0.2f, 0, 0), new Vector3(0.4f, 0.9f, 0), Quaternion.identity);
         foreach (Collider collider in collis)
         {
-            daño = Mathf.RoundToInt(Random.Range(Stats.atq[Stats.lvl_atq] - 2, Stats.atq[Stats.lvl_atq] + 7));
+            daño = Mathf.RoundToInt(Random.Range(Stats.atq[Stats.lvl_atq] - 1, Stats.atq[Stats.lvl_atq] + 2));
             if (collider.gameObject.GetComponentInChildren<Stats>() != null)
             {
                 Stats malo_stats = collider.GetComponentInChildren<Stats>();
                 if (malo_stats.Equipo != Stats.Equipo)
                 {
-                    collider.GetComponent<Rigidbody>().AddForce(new Vector3(2, 1, 0), ForceMode.Impulse);
-                    GameObject GO = Instantiate(Daño_prefab, collider.transform.position + new Vector3(Random.Range(-0.55f, 0.55f), Random.Range(-0.23f, 0.23f), 0), Quaternion.identity);
-                    GO.GetComponentInChildren<Text>().text = daño.ToString();
+                    collider.GetComponent<Rigidbody>().AddForce(new Vector3(Stats.empuje[Stats.lvl_empuje] * dir, Stats.empuje[Stats.lvl_empuje], 0), ForceMode.Impulse);
                     malo_stats.ADD_Vida(-daño);
                     Stats.select_update();
                 }
@@ -157,24 +155,6 @@ public class Ivancho_scrpt : MonoBehaviour
                     Physics.IgnoreCollision(col, GetComponent<Collider>());
                 }
             }
-        }
-    }
-    void Daño_color(GameObject GO, int Daño)
-    {
-        if (daño <= 5)
-        {
-            GO.GetComponentInChildren<Text>().color = Color.white;
-            GO.GetComponentInChildren<Text>().transform.localScale = new Vector3(1f, 1f, 1);
-        }
-        else if (daño < 10)
-        {
-            GO.GetComponentInChildren<Text>().color = Color.yellow;
-            GO.GetComponentInChildren<Text>().transform.localScale = new Vector3(2.5f, 2.5f, 1);
-        }
-        else if (daño >= 10)
-        {
-            GO.GetComponentInChildren<Text>().color = Color.red;
-            GO.GetComponentInChildren<Text>().transform.localScale = new Vector3(7.5f, 7.5f, 1);
         }
     }
     void aire()

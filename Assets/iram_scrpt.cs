@@ -12,6 +12,7 @@ public class iram_scrpt : MonoBehaviour
     ContactFilter2D ContactFilter2D;
     Stats Stats;
     public bool ulti;
+    bool aire_b;
     int LYRMSK = 1 << 9;
     bool atacando = false;
     string equipo_malo;
@@ -19,14 +20,17 @@ public class iram_scrpt : MonoBehaviour
     {
         Animator = GetComponent<Animator>();
         Stats = GetComponentInChildren<Stats>();
-        if(Stats.Equipo == "A")
+        if (Stats.Equipo == "A")
         {
             equipo_malo = "B";
+            LYRMSK = 1 << 9;
         }
-        else if(Stats.Equipo == "B")
+        else if (Stats.Equipo == "B")
         {
             equipo_malo = "A";
+            LYRMSK = 1 << 8;
         }
+        GetComponent<SpriteRenderer>().flipX = dir == 1 ? false : true;
     }
     void Update()
     {
@@ -61,6 +65,15 @@ public class iram_scrpt : MonoBehaviour
         {
             ulti = true;
             Stats.Power = 100;
+        }
+        if (!Physics.Raycast(transform.position, Vector3.down, 0.8f) && ulti == false)
+        {
+            aire_b = true;
+            aire();
+        }
+        else
+        {
+            aire_b = false;
         }
         No_coll();
     }
@@ -100,7 +113,7 @@ public class iram_scrpt : MonoBehaviour
         Heladito_scrpt heladito_Scrpt = GO.GetComponent<Heladito_scrpt>();
         heladito_Scrpt.Sabor = sabor;
         heladito_Scrpt.creador = Stats;
-        GO.GetComponent<Rigidbody>().AddForce(new Vector3( Random.Range(4,6)*dir,Random.Range(2.5f,3),0),ForceMode.Impulse);
+        GO.GetComponent<Rigidbody>().AddForce(new Vector3( Random.Range(4,6)*dir,Random.Range(1.8f,2.6f),0),ForceMode.Impulse);
         Stats.ADD_Power(8);
     }
     void No_coll()
@@ -118,5 +131,9 @@ public class iram_scrpt : MonoBehaviour
             }
         }
     }
-
+    void aire()
+    {
+        Animator.SetInteger("estado", 2);
+        atacando = false;
+    }
 }

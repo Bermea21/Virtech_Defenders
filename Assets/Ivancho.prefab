@@ -120,7 +120,7 @@ MonoBehaviour:
   lvl_escudo: 0
   Vida: 0
   Power: 0
-  atq: 080000000a0000000c0000000f00000011000000
+  atq: 06000000080000000c0000000f00000011000000
   vida_inicial: 3c0000005a0000008c00000096000000aa000000
   escudo: 000000000300000005000000070000000b000000
   velocidad:
@@ -139,6 +139,8 @@ MonoBehaviour:
   Vida_Rect: {fileID: 7003079149545011836}
   Equipo: A
   selected: 0
+  "Texto_da\xF1o_prefab": {fileID: 5339152654144890818, guid: 25439f8cc73063b4290383c125e78bef,
+    type: 3}
 --- !u!1 &7003079148495110125
 GameObject:
   m_ObjectHideFlags: 0
@@ -572,7 +574,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 120
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!136 &7003079149744310961
 CapsuleCollider:
   m_ObjectHideFlags: 0
