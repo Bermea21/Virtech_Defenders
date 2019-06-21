@@ -4,10 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 public class Stats : MonoBehaviour
 {
-    public int lvl_vida, lvl_atq, lvl_spd, lvl_atq_spd, lvl_escudo,lvl_empuje;
+    public int lvl_vida, lvl_atq, lvl_spd, lvl_atq_spd, lvl_escudo, lvl_empuje,lvl_robo_vida,vida_comprada = 0;
     public float Vida, Power;
-    public int[] atq = { 6, 7, 9, 11, 13 }, vida_inicial = { 100, 120, 150, 170, 200 }, escudo = {3, 5, 8, 9, 12}; //hasta 5 niveles
-    public float[] velocidad = { 1.3f, 1.5f, 1.7f, 1.9f, 2f }, Atq_speed = { 0.9f, 1.1f, 1.3f, 1.4f, 1.5f },empuje = {0,1,2,3,4};
+    public int[] atq = { 6, 7, 9, 11, 13 }, vida_inicial = { 100, 120, 150, 170, 200 }, escudo = { 3, 5, 8, 9, 12 }, robo_vida = {0,1,3,4,6}; //hasta 5 niveles
+    public float[] velocidad = { 1.3f, 1.5f, 1.7f, 1.9f, 2f }, Atq_speed = { 0.9f, 1.1f, 1.3f, 1.4f, 1.5f }, empuje = { 0, 1, 2, 3, 4 };
     public RectTransform Power_Rect, Vida_Rect;
     public string Equipo;
     Panel_scrpt panel_Scrpt;
@@ -21,6 +21,8 @@ public class Stats : MonoBehaviour
     }
     void Start()
     {
+        Equipo = gameObject.layer == 8 ? "A" : "B";
+        GetComponentInParent<SpriteRenderer>().flipX =Equipo == "A"? false : true;
         Vida = vida_inicial[lvl_vida];
         ADD_Power(0);
         ADD_Vida(0);
@@ -44,7 +46,6 @@ public class Stats : MonoBehaviour
     }
     public void ADD_Vida(int suma)
     {
-        //Golpe
         if (suma < 0)
         {
             suma += escudo[lvl_escudo];
@@ -53,11 +54,23 @@ public class Stats : MonoBehaviour
             GameObject GO = Instantiate(Texto_daño_prefab, transform.position + new Vector3(Random.Range(-0.3f, 0.3f), Random.Range(-0.23f, 0.23f), 0), Quaternion.identity);
             Daño_color(GO, suma);
             GO.GetComponentInChildren<Text>().text = suma.ToString();
+            if(Vida <= 0)
+            {
+                if(selected == true)
+                {
+                    panel_Scrpt.close();
+                }
+                GetComponentInParent<Animator>().SetLayerWeight(1, 1);
+                GetComponentInParent<Animator>().SetBool("muerte",true);
+            }
         }
         //Curacion
-        else
+        else if(suma > 0)
         {
-            Vida += suma;
+            Vida = (Vida + suma)< vida_inicial[lvl_vida]?Vida+suma:Vida = vida_inicial[lvl_vida];
+            GameObject GO = Instantiate(Texto_daño_prefab, transform.position + new Vector3(Random.Range(-0.3f, 0.3f), Random.Range(-0.23f, 0.23f), 0), Quaternion.identity);
+            GO.GetComponentInChildren<Text>().text = $"+{suma}";
+            GO.GetComponentInChildren<Text>().color = Color.green;
         }
         if (Vida <= vida_inicial[lvl_vida])
         {
@@ -81,7 +94,7 @@ public class Stats : MonoBehaviour
             case 1:
                 if(lvl_vida < 4)
                 lvl_vida++;
-                Vida += 20;
+                ADD_Vida(20);
                 break;
             case 2:
                 if(lvl_spd < 4)
@@ -92,7 +105,8 @@ public class Stats : MonoBehaviour
                 lvl_atq_spd++;
                 break;
             case 4:
-                Vida += 20;
+                ADD_Vida(20);
+                vida_comprada++;
                 break;
             case 5:
                 if(lvl_escudo < 4)
@@ -101,6 +115,10 @@ public class Stats : MonoBehaviour
             case 6:
                 if (lvl_empuje < 4)
                     lvl_empuje++;
+                break;
+            case 7:
+                if (lvl_robo_vida < 4)
+                    lvl_robo_vida++;
                 break;
         }
         select_update();

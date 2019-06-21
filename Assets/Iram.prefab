@@ -118,11 +118,15 @@ MonoBehaviour:
   lvl_spd: 0
   lvl_atq_spd: 0
   lvl_escudo: 0
+  lvl_empuje: 0
+  lvl_robo_vida: 0
+  vida_comprada: 0
   Vida: 0
   Power: 0
   atq: 04000000070000000a0000000c0000000e000000
   vida_inicial: 640000007800000096000000aa000000be000000
   escudo: 0100000003000000040000000600000009000000
+  robo_vida: 0000000000000000010000000300000004000000
   velocidad:
   - 0.5
   - 0.8
@@ -135,6 +139,12 @@ MonoBehaviour:
   - 1.3
   - 1.4
   - 1.5
+  empuje:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
   Power_Rect: {fileID: 891372299}
   Vida_Rect: {fileID: 1304997272}
   Equipo: A
@@ -512,7 +522,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 1394ff7bf15831c429a2711d70b44167, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d8c74e1e685367040b935c527c6285e9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -578,7 +588,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 120
-  m_CollisionDetection: 2
+  m_CollisionDetection: 3
 --- !u!136 &5924143908693746619
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -589,7 +599,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.09448099
-  m_Height: 9.611412
+  m_Radius: 0.09705496
+  m_Height: 9.815388
   m_Direction: 1
-  m_Center: {x: -0.36932978, y: -0.38821587, z: 0}
+  m_Center: {x: -0.036531515, y: -0.031793628, z: 0}

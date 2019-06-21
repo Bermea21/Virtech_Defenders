@@ -29,5 +29,10 @@ public class Heladito_scrpt : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+        else if(collision.tag == "Suelo")
+        {
+            Instantiate(Explo[Sabor], transform.position, Quaternion.identity);
+            Destroy(gameObject);
+        }
     }
 }

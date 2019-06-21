@@ -16,21 +16,14 @@ public class iram_scrpt : MonoBehaviour
     int LYRMSK = 1 << 9;
     bool atacando = false;
     string equipo_malo;
+    float dist;
     void Start()
     {
         Animator = GetComponent<Animator>();
         Stats = GetComponentInChildren<Stats>();
-        if (Stats.Equipo == "A")
-        {
-            equipo_malo = "B";
-            LYRMSK = 1 << 9;
-        }
-        else if (Stats.Equipo == "B")
-        {
-            equipo_malo = "A";
-            LYRMSK = 1 << 8;
-        }
-        GetComponent<SpriteRenderer>().flipX = dir == 1 ? false : true;
+        equipo_malo = gameObject.layer == 8 ? "B" : "A";
+        LYRMSK = gameObject.layer == 8 ? LYRMSK = 1 << 9 : LYRMSK = 1 << 8;
+        dir = gameObject.layer == 8 ? 1 : -1;
     }
     void Update()
     {
@@ -50,6 +43,7 @@ public class iram_scrpt : MonoBehaviour
                         ultimate_atk();
                     }
                     atacando = true;
+                    dist = RH.distance;
                 }
                 else if (atacando == false)
                 {
@@ -113,7 +107,7 @@ public class iram_scrpt : MonoBehaviour
         Heladito_scrpt heladito_Scrpt = GO.GetComponent<Heladito_scrpt>();
         heladito_Scrpt.Sabor = sabor;
         heladito_Scrpt.creador = Stats;
-        GO.GetComponent<Rigidbody>().AddForce(new Vector3( Random.Range(4,6)*dir,Random.Range(1.8f,2.6f),0),ForceMode.Impulse);
+        GO.GetComponent<Rigidbody>().AddForce(new Vector3( dist*0.7f*dir + 0.3f,dist*0.3f*dir + 0.2f,0),ForceMode.Impulse);
         Stats.ADD_Power(8);
     }
     void No_coll()
@@ -136,4 +130,9 @@ public class iram_scrpt : MonoBehaviour
         Animator.SetInteger("estado", 2);
         atacando = false;
     }
+    public void Dest()
+    {
+        Destroy(gameObject);
+    }
+
 }

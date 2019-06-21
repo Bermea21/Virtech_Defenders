@@ -16,22 +16,15 @@ public class Ivancho_scrpt : MonoBehaviour
     public GameObject Daño_prefab;
     int daño;
     string equipo_malo;
+    int i;
     // Start is called before the first frame update
     void Start()
     {
         Animator = GetComponent<Animator>();
         Stats = GetComponentInChildren<Stats>();
-        if (Stats.Equipo == "A")
-        {
-            equipo_malo = "B";
-            LYRMSK = 1 << 9;
-        }
-        else if (Stats.Equipo == "B")
-        {
-            equipo_malo = "A";
-            LYRMSK = 1 << 8;
-        }
-        GetComponent<SpriteRenderer>().flipX = dir == 1 ? false : true;
+        equipo_malo = gameObject.layer == 8? "B" : "A";
+        LYRMSK = gameObject.layer == 8 ? LYRMSK = 1 << 9 : LYRMSK = 1 << 8 ;
+        dir = gameObject.layer == 8 ? 1 : -1;
     }
     void Update()
     {
@@ -119,6 +112,8 @@ public class Ivancho_scrpt : MonoBehaviour
                     collider.GetComponent<Rigidbody>().AddForce(new Vector3(Stats.empuje[Stats.lvl_empuje]*dir, Stats.empuje[Stats.lvl_empuje], 0), ForceMode.Impulse);
                     Stats.ADD_Power(7);
                     malo_stats.ADD_Vida(-daño);
+                    int robo_vida = daño > Stats.robo_vida[Stats.lvl_robo_vida] ? (Stats.robo_vida[Stats.lvl_robo_vida] - daño) + daño : daño;
+                    Stats.ADD_Vida(robo_vida);
                     Stats.select_update();
                 }
             }
@@ -161,5 +156,9 @@ public class Ivancho_scrpt : MonoBehaviour
     {
         Animator.SetInteger("estado", 2);
         atacando = false;
+    }
+    public void Dest()
+    {
+        Destroy(gameObject);
     }
 }
